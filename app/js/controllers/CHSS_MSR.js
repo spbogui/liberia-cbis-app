@@ -1,11 +1,15 @@
 cbis.controller('CHSS_MSR', ['$scope', '$rootScope','DataSetResource','dataValueSetsResource','DataElementResource','orgUnitResource','dataValueSetsResourceEdit',
     function ($scope, $rootScope, DataSetResource,dataValueSetsResource,DataElementResource,orgUnitResource,dataValueSetsResourceEdit) {
 
-        var dataElement = [],compte = 0, dataValueGet = [],getdata = {};
+        var compte = 0, dataValueGet = [],getdata = {};
         var children = [], id_cha, childrenComplete = [];
+        var parent={},notreDataset = {}, notreOrgUnitId, notrePeriode;
 
-        if($rootScope.datasetSelected.id && $rootScope.periode && $rootScope.orgUnitSelectedId){
+        notreDataset = angular.copy($rootScope.datasetSelected);
+        notreOrgUnitId = angular.copy($rootScope.orgUnitSelectedId);
+        notrePeriode = angular.copy($rootScope.periode);
 
+        if(notreDataset.id && notrePeriode && notreOrgUnitId){
             enteteGetValue();
             getChildren();
         }
@@ -19,6 +23,7 @@ cbis.controller('CHSS_MSR', ['$scope', '$rootScope','DataSetResource','dataValue
             getdata.orgUnit = $rootScope.orgUnitSelectedId;
             getdata.dataValues = [];
         }
+        
         function getDataElements() {
             console.log("entrer dans getDataElements");
             DataSetResource.query({

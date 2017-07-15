@@ -25,7 +25,7 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             getdata.dataValues = [];
         }
 
-        function getDataElements() {
+        /*function getDataElements() {
             console.log("entrer dans getDataElements");
             DataSetResource.query({
                 id: $rootScope.datasetSelected.id,
@@ -58,8 +58,8 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
                 id: dataElement[compte].id,
                 fields: 'code'
             }, function (resultat) {
-                /*console.log("resultat dataElementsCode");
-                 console.log(resultat);*/
+                //console.log("resultat dataElementsCode");
+                 //console.log(resultat);
                 dataElement[compte].code = resultat.code;
                 compte++;
                 if(compte < dataElement.length){dataElementsCode();
@@ -69,7 +69,7 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             }, function (err) {
                 alert("erreur dans dataElementsCode");
             });
-        }
+        }*/
 
         function getDataValue() {
             console.log("entrer dans getDataValue");
