@@ -177,6 +177,8 @@ form.form-horizontal .form-control {
 .cha-report-notification {
     background-color: lightblue;
     width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #0e90d2;
 }
 
 .report-flag {
