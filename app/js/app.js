@@ -27,7 +27,7 @@ var cbis = angular.module('cbis', ['ngRoute', 'ngResource', 'ui-notification', '
         });
     }]);
 
-cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource) {
+cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource','DataElementResource', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource,DataElementResource) {
 
     var orgUnitCollection = [], arrylong = 0, page = 1, pageCount = 0;
     var firstTimestamp;
@@ -36,11 +36,11 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         name: 'Novembre'}, {code: '12', name: 'Decembre'}];
     //var dataYearly = [{code: '', name: 'Janvier - Decembre'}];
     var dataYearly = [{code: '', name: ''}];
-    var dataSetAttendu = [ {code: 'CHA_HRF'},{code: 'CHA_MSR'},{code: 'CHSS_MSR'}]
+    var dataSetAttendu = [ {code: 'CHA_RF'},{code: 'CHA_HRF'},{code: 'CHA_MSR'},{code: 'HRF'},{code: 'CHSS_MSR'},{code: 'C_HRF'}]
     var notreAnnee = new Date();
     notreAnnee = $filter('date')(notreAnnee, 'yyyy');
     notreAnnee = parseInt(notreAnnee);
-    var compte = 0, comptePageCount = 0, DataSet =[];
+    var compte = 0,compter = 0, comptePageCount = 0, DataSet =[];
     $rootScope.datasetSelected = {};
     $rootScope.arbre = [];
     $rootScope.allOrgUnit = [];
@@ -376,23 +376,110 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
     }
 
     function nosDataSets(dataSetAll) {
-       
-        for (var a = 0, b=dataSetAttendu.length; a < b; a++) {
+       var a = 0, conti = true, trouve = false;
+        while (conti) {
             for (var i = 0, j = dataSetAll.length; i < j; i++) {
                 if (dataSetAll[i].code == dataSetAttendu[a].code) {
                     dataSetAttendu[a] = dataSetAll[i];
+                    trouve = true;
                     break;
                 }
             }
+            if(!trouve){
+                dataSetAttendu.splice(a,1);
+                a--;
+            }else{
+                trouve = false;
+            }
+            a++;
+            if(dataSetAttendu.length == a){
+                conti = false;
+            }
         }
-        $rootScope.tousDataSets = angular.copy(dataSetAttendu);
+        //$rootScope.tousDataSets = angular.copy(dataSetAttendu);
+        if(dataSetAttendu.length > 0){
+            console.log("vers dans getDataElements ======>");
+            console.log(dataSetAttendu);
+            compte = 0;
+            getDataElements();
+        }
+        
     }
+
+    function getDataElements() {
+        console.log("entrer dans getDataElements");
+        DataSetResource.query({
+            id: dataSetAttendu[compte].id,
+            fields: 'dataSetElements'
+        }, function (resultat) {
+            console.log("resultat dataSetElements");
+            console.log(resultat.dataSetElements);
+            dataSetAttendu[compte].dataElement = resultat.dataSetElements;
+            console.log("dataElement");
+            console.log(angular.copy(dataSetAttendu));
+            compte++;
+            if(compte<dataSetAttendu.length){
+                getDataElements();
+            }else{
+                compte = 0;
+                dataElementsId();
+            }
+            
+        }, function (err) {
+        });
+    }
+
+    function dataElementsId() {
+        console.log("entrer dans dataElementsId");
+        for(var i=0,j=dataSetAttendu[compte].dataElement.length;i<j;i++){
+            dataSetAttendu[compte].dataElement[i] = dataSetAttendu[compte].dataElement[i].dataElement;
+        }
+        console.log("dataSetAttendu Fin");
+        console.log(angular.copy(dataSetAttendu));
+        compte++;
+        if(compte<dataSetAttendu.length){
+            dataElementsId();
+        }else{
+            compte = 0;
+            compter = 0;
+            dataElementsCode();
+        }
+        
+        
+    }
+
+    function dataElementsCode() {
+        console.log("entrer dans dataElementsCode");
+        DataElementResource.query({
+            id: dataSetAttendu[compte].dataElement[compter].id,
+            fields: 'code'
+        }, function (resultat) {
+            dataSetAttendu[compte].dataElement[compter].code = resultat.code;
+            compter++;
+            if(compter < dataSetAttendu[compte].dataElement.length){
+                dataElementsCode();
+            }else{
+                compte++;
+                if(compte < dataSetAttendu.length){
+                    compter = 0;
+                    dataElementsCode();
+                }else{
+                    console.log("dataSetAttendu dataElementsCode");
+                    console.log(angular.copy(dataSetAttendu));
+                }
+            }
+        }, function (err) {
+            alert("erreur dans dataElementsCode");
+        });
+    }
+    
     function displayDataSetName(data) {
         var temp = [];
-        for (var i = 0, j = data.length; i < j; i++) {
-            for (var k = 0, l = allDataSet.length; k < l; k++) {
-                if (data[i].id == allDataSet[k].id) {
-                    temp.push(allDataSet[k]);
+        for (var k = 0, l = dataSetAttendu.length; k < l; k++) {
+            for (var i = 0, j = data.length; i < j; i++) {
+                if (data[i].id == dataSetAttendu[k].id) {
+                    temp.push(dataSetAttendu[k]);
+                    break;
                 }
             }
         }
