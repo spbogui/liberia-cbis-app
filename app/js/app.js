@@ -40,7 +40,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
     var notreAnnee = new Date();
     notreAnnee = $filter('date')(notreAnnee, 'yyyy');
     notreAnnee = parseInt(notreAnnee);
-    var allDataSet = [], compte = 0, comptePageCount = 0;
+    var compte = 0, comptePageCount = 0, DataSet =[];
     $rootScope.datasetSelected = {};
     $rootScope.arbre = [];
     $rootScope.allOrgUnit = [];
@@ -331,10 +331,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
             paging: false,
             fields: 'id,name,timelyDays,periodType,code'
         }, function (resultat) {
-            allDataSet = resultat.dataSets;
-            console.log("allDataSet ==");
-            console.log(allDataSet);
-            $rootScope.tousDataSets = angular.copy(allDataSet);
+            nosDataSets(resultat.dataSets);
         }, function (err) {
             compte = 1;
             getDataSetDetail();
@@ -346,7 +343,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         DataSetResource.query({
             fields: 'id,name,timelyDays,periodType,code'
         }, function (resultat) {
-            allDataSet = resultat.dataSets;
+            DataSet = resultat.dataSets;
             comptePageCount = resultat.pager.pageCount;
             if (compte < comptePageCount) {
                 compte++;
@@ -366,29 +363,29 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
             var tempo1 = [], tempo2 = [];
             tempo1 = angular.copy(allDataSet);
             tempo2 = resultat.dataSets;
-            allDataSet = tempo1.concat(tempo2);
+            DataSet = tempo1.concat(tempo2);
             if (compte < comptePageCount) {
                 compte++;
                 getDataSetDetailAll();
             } else {
-                console.log("allDataSet ==");
-                console.log(allDataSet);
-                $rootScope.tousDataSets = angular.copy(allDataSet);
+                nosDataSets(resultat.dataSets);
             }
         }, function (err) {
 
         });
     }
 
-    function nosDataSets() {
+    function nosDataSets(dataSetAll) {
        
         for (var a = 0, b=dataSetAttendu.length; a < b; a++) {
-            for (var i = 0, j = allDataSet.length; i < j; i++) {
-                if (allDataSet[i].code == dataSetAttendu[a].code) {
-                    dataSetAttendu[a] = allDataSet[i];
+            for (var i = 0, j = dataSetAll.length; i < j; i++) {
+                if (dataSetAll[i].code == dataSetAttendu[a].code) {
+                    dataSetAttendu[a] = dataSetAll[i];
+                    break;
                 }
             }
         }
+        $rootScope.tousDataSets = angular.copy(dataSetAttendu);
     }
     function displayDataSetName(data) {
         var temp = [];
