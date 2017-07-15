@@ -169,9 +169,15 @@ form.form-horizontal .form-control {
     width: 55px;
 }
 
-.table-report-cha input {
+.table-report-cha tbody tr td:first-child {
     text-align: center;
-    width: 45px;
+    background-color: #009926;
+    width: 55px;
+}
+
+.table-report-cha input {
+    text-align: left;
+    /*width: 45px;*/
 }
 
 .cha-report-notification {
