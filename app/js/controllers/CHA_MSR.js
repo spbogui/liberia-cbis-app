@@ -1,19 +1,27 @@
 cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElementResource','dataValueSetsResourceEdit','$filter','dataValueSetsResource','orgUnitResource','completeDataSetRegistrations',
     function ($scope, $rootScope, DataSetResource,DataElementResource,dataValueSetsResourceEdit,$filter,dataValueSetsResource,orgUnitResource,completeDataSetRegistrations) {
 
-        var dataElement = [],compte = 0, dataValueGet = [],getdata = {};
-        var parent={};
+        var compte = 0, dataValueGet = [],getdata = {};
+        var parent={},notreDataset = {}, notreOrgUnitId, notrePeriode;
+        console.log("$rootScope.datasetSelected======>");
+        console.log($rootScope.datasetSelected);
 
-        if($rootScope.datasetSelected.id && $rootScope.periode && $rootScope.orgUnitSelectedId){
+
+        notreDataset = angular.copy($rootScope.datasetSelected);
+        notreOrgUnitId = angular.copy($rootScope.orgUnitSelectedId);
+        notrePeriode = angular.copy($rootScope.periode);
+
+        if(notreDataset.id && notrePeriode && notreOrgUnitId){
             enteteGetValue();
-            getDataElements();
+            //getDataElements();
+            getDataValue();
         }
         function enteteGetValue() {
             getdata = {};
-            getdata.dataSet = $rootScope.datasetSelected.id;
+            getdata.dataSet = notreDataset.id;
             getdata.completeData = formatDate();
-            getdata.period = $rootScope.periode;
-            getdata.orgUnit = $rootScope.orgUnitSelectedId;
+            getdata.period = notrePeriode;
+            getdata.orgUnit = notreOrgUnitId;
             getdata.dataValues = [];
         }
 
@@ -66,9 +74,9 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
         function getDataValue() {
             console.log("entrer dans getDataValue");
             dataValueSetsResource.query({
-                dataSet: $rootScope.datasetSelected.id,
-                period: $rootScope.periode,
-                orgUnit: $rootScope.orgUnitSelectedId
+                dataSet: notreDataset.id,
+                period: notrePeriode,
+                orgUnit: notreOrgUnitId
             }, function (resultat) {
                 console.log("resultat");
                 console.log(resultat);
@@ -87,16 +95,16 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             console.log("entrer dans restitValue");
             var temp = [];
             for(var i=0,j=dataValueGet.length;i<j;i++){
-                for(var k=0,l=dataElement.length;k<l;k++){
-                    if(dataValueGet[i].dataElement == dataElement[k].id){
-                        dataElement[k].value = dataValueGet[i].value;
-                        temp.push(dataElement[k]);
+                for(var k=0,l=notreDataset.dataElement.length;k<l;k++){
+                    if(dataValueGet[i].dataElement == notreDataset.dataElement[k].id){
+                        notreDataset.dataElement[k].value = dataValueGet[i].value;
+                        temp.push(notreDataset.dataElement[k]);
                         break;
                     }
                 }
             }
-            console.log("dataElement");
-            console.log(dataElement);
+            console.log("notreDataset");
+            console.log(notreDataset);
             console.log("temp");
             console.log(temp);
             mappingEntre();
@@ -229,122 +237,122 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
 
         function mappingEntre() {
             console.log("entrer dans mappingEntre");
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2A"){$scope.H12A = dataElement[i].value ; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2A"){$scope.H12A = notreDataset.dataElement[i].value ; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2B"){$scope.H12B = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2B"){$scope.H12B = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2C"){ $scope.H12C = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2C"){ $scope.H12C = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2D"){$scope.H12D = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2D"){$scope.H12D = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2E"){$scope.H12E = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2E"){$scope.H12E = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2F"){ $scope.H12F = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2F"){ $scope.H12F = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2G"){$scope.H12G = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2G"){$scope.H12G = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2H"){$scope.H12H = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2H"){$scope.H12H = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2I"){$scope.H12I = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2I"){$scope.H12I = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2K"){$scope.H12K = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2K"){$scope.H12K = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "1.2J"){$scope.H12J = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "1.2J"){$scope.H12J = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1A"){$scope.H21A = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1A"){$scope.H21A = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1B"){$scope.H21B = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1B"){$scope.H21B = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1C"){$scope.H21C = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1C"){$scope.H21C = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1D"){$scope.H21D = dataElement[i].value ; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1D"){$scope.H21D = notreDataset.dataElement[i].value ; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1E"){$scope.H21E = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1E"){$scope.H21E = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1F"){$scope.H21F = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1F"){$scope.H21F = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.1G"){$scope.H21G = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.1G"){$scope.H21G = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "2.2A"){$scope.H22A = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "2.2A"){$scope.H22A = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1A"){$scope.H31A = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1A"){$scope.H31A = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1B"){$scope.H31B = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1B"){$scope.H31B = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1C"){$scope.H31C = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1C"){$scope.H31C = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1D"){$scope.H31D = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1D"){$scope.H31D = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1E"){$scope.H31E = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1E"){$scope.H31E = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1F"){$scope.H31F = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1F"){$scope.H31F = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1G"){$scope.H31G = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1G"){$scope.H31G = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1H"){$scope.H31H = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1H"){$scope.H31H = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1I"){$scope.H31I = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1I"){$scope.H31I = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1J"){$scope.H31J = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1J"){$scope.H31J = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1K"){$scope.H31K = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1K"){$scope.H31K = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1L"){$scope.H31L = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1L"){$scope.H31L = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1M"){$scope.H31M = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1M"){$scope.H31M = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "3.1N"){$scope.H31N = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "3.1N"){$scope.H31N = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1A"){$scope.H41A = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1A"){$scope.H41A = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1B"){$scope.H41B = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1B"){$scope.H41B = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1C"){$scope.H41C = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1C"){$scope.H41C = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1D"){$scope.H41D = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1D"){$scope.H41D = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1E"){$scope.H41E = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1E"){$scope.H41E = notreDataset.dataElement[i].value; break;}
             }
-            for(var i=0,j=dataElement.length;i<j;i++){
-                if(dataElement[i].code == "4.1F"){$scope.H41F = dataElement[i].value; break;}
+            for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                if(notreDataset.dataElement[i].code == "4.1F"){$scope.H41F = notreDataset.dataElement[i].value; break;}
             }
         }
 
