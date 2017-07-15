@@ -464,6 +464,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
                     compter = 0;
                     dataElementsCode();
                 }else{
+                    $rootScope.tousDataSets = angular.copy(dataSetAttendu);
                     console.log("dataSetAttendu dataElementsCode");
                     console.log(angular.copy(dataSetAttendu));
                 }
