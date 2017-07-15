@@ -245,7 +245,7 @@ cbis.controller('CHSS_MSR', ['$scope', '$rootScope','DataSetResource','dataValue
 
         function getChildren() {
             orgUnitResource.query({
-                id: $rootScope.orgUnitSelectedId,
+                id: notreOrgUnitId,
                 fields: 'children'
             }, function (data) {
                 children = data.children;
