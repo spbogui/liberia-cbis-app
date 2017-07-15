@@ -271,9 +271,12 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         //console.log(branche.data);
         if ($rootScope.orgUnitSelectedId != branche.data.id) {
             $location.path('acceuil');
+            $rootScope.dataSetID = {};
+            $rootScope.periode = "";
             $rootScope.orgUnitSelected = branche.data.name;
             $rootScope.orgUnitSelectedId = branche.data.id;
             console.log("orgUnitSelectedId = " + $rootScope.orgUnitSelectedId);
+
             if (branche.data.dataSets) {
                 displayDataSetName(branche.data.dataSets)
             }

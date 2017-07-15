@@ -418,11 +418,11 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             console.log("lecode = "+lecode+";=> valeur = "+valeur);
             if(valeur){
                 var tempo = [];
-                for(var i=0,j=dataElement.length;i<j;i++){
-                    if(dataElement[i].code == lecode){dataElement[i].value = valeur;
+                for(var i=0,j=notreDataset.dataElement.length;i<j;i++){
+                    if(notreDataset.dataElement[i].code == lecode){notreDataset.dataElement[i].value = valeur;
                         console.log("touver !!!!!!!!!!!!!");
-                        console.log(dataElement[i]);
-                        tempo.push(dataElement[i]);
+                        console.log(notreDataset.dataElement[i]);
+                        tempo.push(notreDataset.dataElement[i]);
                         formaterValue(tempo);
                         break;
                     }
@@ -434,11 +434,11 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
 
         $scope.enregistrer = function () {
             console.log("entrer dans enregistrer++++++++++++++++++++++");
-            console.log(dataElement);
-            console.log(angular.copy(dataElement));
-            formaterValue(dataElement);
+            console.log(notreDataset);
+            console.log(angular.copy(notreDataset));
+            //formaterValue(notreDataset.dataElement);
             deleteEmpty();
-            //getParent();
+            
         }
 
         function complete() {
@@ -462,21 +462,22 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
         function deleteEmpty() {
             var i=0, conti = true;
             while(conti){
-                if(!dataElement[i].value || !dataElement[i].code){
-                    dataElement.splice(i, 1);
+                if(!notreDataset.dataElement[i].value || !notreDataset.dataElement[i].code){
+                    notreDataset.dataElement.splice(i, 1);
                     i--;
                 }
                 i++;
-                if(i == dataElement.length){
+                if(i == notreDataset.dataElement.length){
                     conti = false;
                 }
             }
             console.log("dataElement apres delete");
-            console.log(dataElement);
+            console.log(notreDataset.dataElement);
+            getParent();
         }
         function getParent() {
             orgUnitResource.query({
-                id: $rootScope.orgUnitSelectedId,
+                id: notreOrgUnitId,
                 fields: 'parent'
             }, function (data) {
                 console.log(data);
@@ -547,7 +548,7 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             console.log("entrer dans getParentDataValue");
             dataValueSetsResource.query({
                 dataSet: parent.leDataSet,
-                period: $rootScope.periode,
+                period: notrePeriode,
                 orgUnit: parent.id
             }, function (resultat) {
                 console.log("resultat");
@@ -563,14 +564,15 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             });
         }
         function parentValeur() {
+            console.log("entrer dans parentValeur");
             console.log("dataElement");
-            console.log(dataElement);
+            console.log(notreDataset.dataElement);
             console.log("parent parentValeur");
             console.log(angular.copy(parent));
-            for(var k=0,l=dataElement.length;k<l;k++){
+            for(var k=0,l=notreDataset.dataElement.length;k<l;k++){
                 for(var i=0,j=parent.dataElement.length;i<j;i++){
-                    if(dataElement[k].id == parent.dataElement[i].id){
-                        parent.dataElement[i].value = dataElement[k].value;
+                    if(notreDataset.dataElement[k].id == parent.dataElement[i].id){
+                        parent.dataElement[i].value = notreDataset.dataElement[k].value;
                         break;
                     }
                 }
@@ -586,6 +588,7 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
                 for(var k=0,l=parent.dataElement.length;k<l;k++){
                     if(data[i].dataElement == parent.dataElement[k].id){
                         parent.dataElement[k].value = data[i].value;
+                        console.log("valeur = "+parent.dataElement[k].value)
                         console.log("k = "+k);
                         break;
                     }
@@ -596,9 +599,10 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             addValue();
         }
         function prepaEnvoie() {
+            console.log("entrer dans prepaEnvoie");
             getdata = {};
             getdata.dataSet = parent.leDataSet;
-            getdata.period = $rootScope.periode;
+            getdata.period = notrePeriode;
             getdata.orgUnit = parent.id;
             getdata.dataValues = [];
             formaterValue(parent.dataElement);
@@ -606,15 +610,15 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
 
         function addValue() {
             console.log("entrer dans addValue");
-            for(var i=0,j=dataElement.length; i<j;i++){
+            for(var i=0,j=notreDataset.dataElement.length; i<j;i++){
                 for(var k=0,l= parent.dataElement.length;k<l;k++){
-                    if(dataElement[i].id == parent.dataElement[k].id){
-                        dataElement[i].value =  parseInt(dataElement[i].value);
+                    if(notreDataset.dataElement[i].id == parent.dataElement[k].id){
+                        notreDataset.dataElement[i].value =  parseInt(notreDataset.dataElement[i].value);
                         if(parent.dataElement[k].value){
                             parent.dataElement[k].value = parseInt(parent.dataElement[k].value);
-                            parent.dataElement[k].value = parent.dataElement[k].value + dataElement[i].value;
+                            parent.dataElement[k].value = parent.dataElement[k].value + notreDataset.dataElement[i].value;
                         }else{
-                            parent.dataElement[k].value = dataElement[i].value;
+                            parent.dataElement[k].value = notreDataset.dataElement[i].value;
                         }
                         break;
                     }
@@ -622,6 +626,7 @@ cbis.controller('CHA_MSR', ['$scope', '$rootScope','DataSetResource','DataElemen
             }
             console.log("parent for dataElement");
             console.log(parent);
+            prepaEnvoie();
             formaterValue(parent.dataElement);
         }
     }
