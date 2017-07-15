@@ -31,18 +31,12 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
 
     var orgUnitCollection = [], arrylong = 0, page = 1, pageCount = 0;
     var firstTimestamp;
-    var dataMonthly = [{code: '01', name: 'Janvier'}, {code: '02', name: 'Fevrier'}, {
-        code: '03',
-        name: 'Mars'
-    }, {code: '04', name: 'Avril'}, {code: '05', name: 'Mai'}, {code: '06', name: 'Juin'}, {
-        code: '07',
-        name: 'Juillet'
-    }, {code: '08', name: 'Aout'}, {code: '09', name: 'Septembre'}, {code: '10', name: 'Octobre'}, {
+    var dataMonthly = [{code: '01', name: 'Janvier'}, {code: '02', name: 'Fevrier'}, {code: '03', name: 'Mars'}, {code: '04', name: 'Avril'}, {code: '05', name: 'Mai'}, {code: '06', name: 'Juin'}, {code: '07', name: 'Juillet'}, {code: '08', name: 'Aout'}, {code: '09', name: 'Septembre'}, {code: '10', name: 'Octobre'}, {
         code: '11',
-        name: 'Novembre'
-    }, {code: '12', name: 'Decembre'}];
+        name: 'Novembre'}, {code: '12', name: 'Decembre'}];
     //var dataYearly = [{code: '', name: 'Janvier - Decembre'}];
     var dataYearly = [{code: '', name: ''}];
+    var dataSetAttendu = [ {code: 'CHA_HRF'},{code: 'CHA_MSR'},{code: 'CHSS_MSR'}]
     var notreAnnee = new Date();
     notreAnnee = $filter('date')(notreAnnee, 'yyyy');
     notreAnnee = parseInt(notreAnnee);
@@ -57,16 +51,6 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
 
     getOrgUnitLevel();
     getDataSet();
-
-    $rootScope.initialiser = function () {
-        orgUnitCollection = [], arrylong = 0;
-        $rootScope.arbre = [];
-        $rootScope.allOrgUnit = [];
-        $rootScope.OrgUnitGroup = [];
-        $rootScope.niveauOrgUnit;
-        getOrgUnitLevel();
-    }
-
 
     function getOrgUnitLevel() {
         console.log("lancement de collecte des orgUnit");
@@ -334,6 +318,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         notreAnnee -= 1;
         formaterPeriod();
     }
+
     $rootScope.anneeSuivante = function () {
         console.log("entrer dans anneeSuivante");
         notreAnnee += 1;
@@ -395,7 +380,16 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         });
     }
 
-
+    function nosDataSets() {
+       
+        for (var a = 0, b=dataSetAttendu.length; a < b; a++) {
+            for (var i = 0, j = allDataSet.length; i < j; i++) {
+                if (allDataSet[i].code == dataSetAttendu[a].code) {
+                    dataSetAttendu[a] = allDataSet[i];
+                }
+            }
+        }
+    }
     function displayDataSetName(data) {
         var temp = [];
         for (var i = 0, j = data.length; i < j; i++) {
