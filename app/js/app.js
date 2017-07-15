@@ -27,26 +27,20 @@ var cbis = angular.module('cbis', ['ngRoute', 'ngResource', 'ui-notification', '
         });
     }]);
 
-cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource) {
+cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource','DataElementResource', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource,DataElementResource) {
 
     var orgUnitCollection = [], arrylong = 0, page = 1, pageCount = 0;
     var firstTimestamp;
-    var dataMonthly = [{code: '01', name: 'Janvier'}, {code: '02', name: 'Fevrier'}, {
-        code: '03',
-        name: 'Mars'
-    }, {code: '04', name: 'Avril'}, {code: '05', name: 'Mai'}, {code: '06', name: 'Juin'}, {
-        code: '07',
-        name: 'Juillet'
-    }, {code: '08', name: 'Aout'}, {code: '09', name: 'Septembre'}, {code: '10', name: 'Octobre'}, {
+    var dataMonthly = [{code: '01', name: 'Janvier'}, {code: '02', name: 'Fevrier'}, {code: '03', name: 'Mars'}, {code: '04', name: 'Avril'}, {code: '05', name: 'Mai'}, {code: '06', name: 'Juin'}, {code: '07', name: 'Juillet'}, {code: '08', name: 'Aout'}, {code: '09', name: 'Septembre'}, {code: '10', name: 'Octobre'}, {
         code: '11',
-        name: 'Novembre'
-    }, {code: '12', name: 'Decembre'}];
+        name: 'Novembre'}, {code: '12', name: 'Decembre'}];
     //var dataYearly = [{code: '', name: 'Janvier - Decembre'}];
     var dataYearly = [{code: '', name: ''}];
+    var dataSetAttendu = [ {code: 'CHA_RF'},{code: 'CHA_HRF'},{code: 'CHA_MSR'},{code: 'HRF'},{code: 'CHSS_MSR'},{code: 'C_HRF'}]
     var notreAnnee = new Date();
     notreAnnee = $filter('date')(notreAnnee, 'yyyy');
     notreAnnee = parseInt(notreAnnee);
-    var allDataSet = [], compte = 0, comptePageCount = 0;
+    var compte = 0,compter = 0, comptePageCount = 0, DataSet =[];
     $rootScope.datasetSelected = {};
     $rootScope.arbre = [];
     $rootScope.allOrgUnit = [];
@@ -57,16 +51,6 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
 
     getOrgUnitLevel();
     getDataSet();
-
-    $rootScope.initialiser = function () {
-        orgUnitCollection = [], arrylong = 0;
-        $rootScope.arbre = [];
-        $rootScope.allOrgUnit = [];
-        $rootScope.OrgUnitGroup = [];
-        $rootScope.niveauOrgUnit;
-        getOrgUnitLevel();
-    }
-
 
     function getOrgUnitLevel() {
         console.log("lancement de collecte des orgUnit");
@@ -334,6 +318,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         notreAnnee -= 1;
         formaterPeriod();
     }
+
     $rootScope.anneeSuivante = function () {
         console.log("entrer dans anneeSuivante");
         notreAnnee += 1;
@@ -346,10 +331,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
             paging: false,
             fields: 'id,name,timelyDays,periodType,code'
         }, function (resultat) {
-            allDataSet = resultat.dataSets;
-            console.log("allDataSet ==");
-            console.log(allDataSet);
-            $rootScope.tousDataSets = angular.copy(allDataSet);
+            nosDataSets(resultat.dataSets);
         }, function (err) {
             compte = 1;
             getDataSetDetail();
@@ -361,7 +343,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         DataSetResource.query({
             fields: 'id,name,timelyDays,periodType,code'
         }, function (resultat) {
-            allDataSet = resultat.dataSets;
+            DataSet = resultat.dataSets;
             comptePageCount = resultat.pager.pageCount;
             if (compte < comptePageCount) {
                 compte++;
@@ -381,27 +363,124 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
             var tempo1 = [], tempo2 = [];
             tempo1 = angular.copy(allDataSet);
             tempo2 = resultat.dataSets;
-            allDataSet = tempo1.concat(tempo2);
+            DataSet = tempo1.concat(tempo2);
             if (compte < comptePageCount) {
                 compte++;
                 getDataSetDetailAll();
             } else {
-                console.log("allDataSet ==");
-                console.log(allDataSet);
-                $rootScope.tousDataSets = angular.copy(allDataSet);
+                nosDataSets(resultat.dataSets);
             }
         }, function (err) {
 
         });
     }
 
+    function nosDataSets(dataSetAll) {
+       var a = 0, conti = true, trouve = false;
+        while (conti) {
+            for (var i = 0, j = dataSetAll.length; i < j; i++) {
+                if (dataSetAll[i].code == dataSetAttendu[a].code) {
+                    dataSetAttendu[a] = dataSetAll[i];
+                    trouve = true;
+                    break;
+                }
+            }
+            if(!trouve){
+                dataSetAttendu.splice(a,1);
+                a--;
+            }else{
+                trouve = false;
+            }
+            a++;
+            if(dataSetAttendu.length == a){
+                conti = false;
+            }
+        }
+        //$rootScope.tousDataSets = angular.copy(dataSetAttendu);
+        if(dataSetAttendu.length > 0){
+            console.log("vers dans getDataElements ======>");
+            console.log(dataSetAttendu);
+            compte = 0;
+            getDataElements();
+        }
+        
+    }
 
+    function getDataElements() {
+        console.log("entrer dans getDataElements");
+        DataSetResource.query({
+            id: dataSetAttendu[compte].id,
+            fields: 'dataSetElements'
+        }, function (resultat) {
+            console.log("resultat dataSetElements");
+            console.log(resultat.dataSetElements);
+            dataSetAttendu[compte].dataElement = resultat.dataSetElements;
+            console.log("dataElement");
+            console.log(angular.copy(dataSetAttendu));
+            compte++;
+            if(compte<dataSetAttendu.length){
+                getDataElements();
+            }else{
+                compte = 0;
+                dataElementsId();
+            }
+            
+        }, function (err) {
+        });
+    }
+
+    function dataElementsId() {
+        console.log("entrer dans dataElementsId");
+        for(var i=0,j=dataSetAttendu[compte].dataElement.length;i<j;i++){
+            dataSetAttendu[compte].dataElement[i] = dataSetAttendu[compte].dataElement[i].dataElement;
+        }
+        console.log("dataSetAttendu Fin");
+        console.log(angular.copy(dataSetAttendu));
+        compte++;
+        if(compte<dataSetAttendu.length){
+            dataElementsId();
+        }else{
+            compte = 0;
+            compter = 0;
+            dataElementsCode();
+        }
+        
+        
+    }
+
+    function dataElementsCode() {
+        console.log("entrer dans dataElementsCode");
+        DataElementResource.query({
+            id: dataSetAttendu[compte].dataElement[compter].id,
+            fields: 'code'
+        }, function (resultat) {
+            dataSetAttendu[compte].dataElement[compter].code = resultat.code;
+            compter++;
+            if(compter < dataSetAttendu[compte].dataElement.length){
+                dataElementsCode();
+            }else{
+                compte++;
+                if(compte < dataSetAttendu.length){
+                    compter = 0;
+                    dataElementsCode();
+                }else{
+                    $rootScope.tousDataSets = angular.copy(dataSetAttendu);
+                    console.log("dataSetAttendu dataElementsCode");
+                    console.log(angular.copy(dataSetAttendu));
+                }
+            }
+        }, function (err) {
+            alert("erreur dans dataElementsCode");
+        });
+    }
+    
     function displayDataSetName(data) {
         var temp = [];
-        for (var i = 0, j = data.length; i < j; i++) {
-            for (var k = 0, l = allDataSet.length; k < l; k++) {
-                if (data[i].id == allDataSet[k].id) {
-                    temp.push(allDataSet[k]);
+        for (var k = 0, l = dataSetAttendu.length; k < l; k++) {
+            for (var i = 0, j = data.length; i < j; i++) {
+                if (data[i].id == dataSetAttendu[k].id) {
+                    temp.push(dataSetAttendu[k]);
+                    break;
                 }
             }
         }
