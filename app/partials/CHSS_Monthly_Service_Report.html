@@ -1,353 +1,317 @@
-<table width="1063" bordercolor="#FFFFFF">
-    <tbody>
-    <tr>
-        <td>
-            <table border="1" cellpadding="0" cellspacing="0" width="1055">
-                <colgroup>
-                    <col span="94" width="13"/>
-                </colgroup>
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center"><h3>5.2 CHSS Monthly Service Report</h3></div>
+        <hr>
+        <div class="row">
+            <table class="cha-report-notification">
                 <tbody>
                 <tr>
-                    <td>
-                        <h1 align="center"> CHSS Monthly Service Report</h1>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<table border="1" width="1063" bordercolor="#FFFFFF">
-    <tbody>
-    <tr>
-
-        <td>
-            <table border="1" cellpadding="0" cellspacing="0" height="52" width="1055">
-                <colgroup>
-                    <col span="91" width="13"/>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <td width="80">{{CHA_valeur1}}</td>
-
-                    <td width="80">{{CHA_valeur2}}</td>
-
-                    <td width="80">{{CHA_valeur3}}</td>
-
-                    <td width="80">{{CHA_valeur4}}</td>
-
-                    <td width="80">{{CHA_valeur5}}</td>
-
-                    <td width="80">{{CHA_valeur6}}</td>
-
-                    <td width="80">{{CHA_valeur7}}</td>
-
-                    <td width="80">{{CHA_valeur8}}</td>
-
+                    <td>{{CHA_valeur1}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur2}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur3}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur4}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur5}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur6}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur7}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur8}}</td>
+                    <td class="report-flag"></td>
                 </tr>
                 <tr>
-                    <td width="80">{{CHA_valeur9}}</td>
-
-                    <td width="80">{{CHA_valeur10}}</td>
-
-                    <td width="80">{{CHA_valeur11}}</td>
-
-                    <td width="80">{{CHA_valeur12}}</td>
-
-                    <td width="80">{{CHA_valeur13}}</td>
-
-                    <td width="80">{{CHA_valeur14}}</td>
-
-                    <td width="80">{{CHA_valeur15}}</td>
-
-                    <td width="80">{{CHA_valeur16}}</td>
+                    <td>{{CHA_valeur9}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur10}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur11}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur12}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur13}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur14}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur15}}</td>
+                    <td class="report-flag"></td>
+                    <td>{{CHA_valeur16}}</td>
+                    <td class="report-flag"></td>
 
                 </tr>
                 </tbody>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table align="left" height="553" width="356">
-                <tbody>
-                <tr>
-                    <td width="250px">
-                        <table border="1" bordercolor="#000000" cellpadding="0" cellspacing="0" height="666" width="350"
-                               align="left">
-                            <colgroup>
-                                <col span="31" width="13"/>
-                            </colgroup>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table-report-cha">
+                            <thead>
+                            <tr>
+                                <th><strong>Module 1 - Routine Visit</strong></th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
                             <tbody>
                             <tr>
-                                <td height="50px" width="320"><strong>Module 1 - Routine Visit</strong></td>
-                                <td><strong>Total</strong></td>
-                            </tr>
-                            <tr>
-                            <tr>
-                                <td height="30px">1.2A Routine household visits</td>
-                                <td colspan="5" width="30px"><input type="text" ng-blur="lossFocus('1.2A', H12A)"
-                                                                    ng-model="H12A">
+                                <td>1.2A Routine household visits</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('1.2A', H12A)" ng-model="H12A">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2B Births (community/home)</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2B', H12B)" ng-model="H12B">
+                                <td>1.2B Births (community/home)</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('1.2B', H12B)" ng-model="H12B">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2C Births (facility)</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2C', H12C)" ng-model="H12C">
+                                <td>1.2C Births (facility)</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('1.2C', H12C)" ng-model="H12C">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2D Still births</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2D', H12D)" ng-model="H12D">
+                                <td>1.2D Still births</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('1.2D', H12D)" ng-model="H12D">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2E Neonatal deaths</td>
+                                <td>1.2E Neonatal deaths</td>
                                 <td><input type="text" ng-blur="lossFocus('1.2E', H12E)" ng-model="H12E"></td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2F Post-neonatal deaths</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2F', H12F)" ng-model="H12F">
+                                <td>1.2F Post-neonatal deaths</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('1.2F', H12F)" ng-model="H12F">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2G Child deaths</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2G', H12G)" ng-model="H12G">
-                                </td>
+                                <td>1.2G Child deaths</td>
+                                <td><input type="text" ng-blur="lossFocus('1.2G', H12G)" ng-model="H12G"></td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2H Maternal deaths</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2H', H12H)" ng-model="H12H">
-                                </td>
+                                <td>1.2H Maternal deaths</td>
+                                <td><input type="text" ng-blur="lossFocus('1.2H', H12H)" ng-model="H12H"></td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2I Community triggers</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2I', H12I)" ng-model="H12I">
-                                </td>
+                                <td>1.2I Community triggers</td>
+                                <td><input type="text" ng-blur="lossFocus('1.2I', H12I)" ng-model="H12I"></td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2K Deaths &gt; 5 years (community/home)</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2K', H12K)" ng-model="H12K">
-                                </td>
+                                <td>1.2K Deaths &gt; 5 years (community/home)</td>
+                                <td><input type="text" ng-blur="lossFocus('1.2K', H12K)" ng-model="H12K"></td>
                             </tr>
                             <tr>
-                                <td height="30px">1.2J HIV/TB/CM-NTD/MH Suspect Referrals&nbsp;</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('1.2J', H12J)" ng-model="H12J">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="29" height="50px"><strong>Module 2 - RMNH</strong></td>
-                            </tr>
-                            <tr>
-                                <td height="30px" width="350px">2.1A Pregnant Woman Visits</td>
-                                <td colspan="5" width="30px"><input type="text" ng-blur="lossFocus('2.1A', H21A)"
-                                                                    ng-model="H21A">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1B Referred for Delivery</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1B')" ng-model="H21B"></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1C Referred for ANC</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1C', H21C)" ng-model="H21C">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1D Post Natal Visits</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1D',H21D)" ng-model="H21D">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1E Referred for Danger Sign</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1E', H21E)" ng-model="H21E">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1F HBMNC within 48 hrs: Mother</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1F', H21F)" ng-model="H21F">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.1G HBMNC within 48 hrs: Infant</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.1G', H21G)" ng-model="H21G">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">2.2A Clients currently using modern FP</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('2.2A', H22A)" ng-model="H22A">
-                                </td>
+                                <td>1.2J HIV/TB/CM-NTD/MH Suspect Referrals&nbsp;</td>
+                                <td><input type="text" ng-blur="lossFocus('1.2J', H12J)" ng-model="H12J"></td>
                             </tr>
                             </tbody>
                         </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table align="left" height="378" width="327">
-                <tbody>
-                <tr>
-                    <td height="372">
-                        <table border="1" bordercolor="#000000" cellpadding="4" cellspacing="0" height="368"
-                               width="350">
-                            <colgroup>
-                                <col span="29" width="13"/>
-                            </colgroup>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table-report-cha">
+                            <thead>
+                            <tr>
+                                <th>Module 2 - RMNH</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
                             <tbody>
                             <tr>
-                                <td height="50" width="320"><strong>Module 3 - iCCM</strong></td>
-                                <td><strong>Total</strong></td>
+                                <td>2.1A Pregnant Woman Visits</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1A', H21A)" ng-model="H21A"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1A Active Case Finds</td>
-                                <td width="47"><input type="text" ng-blur="lossFocus('3.1A', H31A)" ng-model="H31A">
+                                <td>2.1B Referred for Delivery</td>
+                                <td>
+                                    <input type="text" ng-blur="lossFocus('2.1B', H21B)" ng-model="H21B">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1B MUAC Red</td>
+                                <td>2.1C Referred for ANC</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1C', H21C)" ng-model="H21C"></td>
+                            </tr>
+                            <tr>
+                                <td>2.1D Post Natal Visits</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1D',H21D)" ng-model="H21D"></td>
+                            </tr>
+                            <tr>
+                                <td>2.1E Referred for Danger Sign</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1E', H21E)" ng-model="H21E"></td>
+                            </tr>
+                            <tr>
+                                <td>2.1F HBMNC within 48 hrs: Mother</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1F', H21F)" ng-model="H21F"></td>
+                            </tr>
+                            <tr>
+                                <td>2.1G HBMNC within 48 hrs: Infant</td>
+                                <td><input type="text" ng-blur="lossFocus('2.1G', H21G)" ng-model="H21G"></td>
+                            </tr>
+                            <tr>
+                                <td>2.2A Clients currently using modern FP</td>
+                                <td><input type="text" ng-blur="lossFocus('2.2A', H22A)" ng-model="H22A"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Module 3 - iCCM</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>3.1A Active Case Finds</td>
+                                <td><input type="text" ng-blur="lossFocus('3.1A', H31A)" ng-model="H31A"></td>
+                            </tr>
+                            <tr>
+                                <td>3.1B MUAC Red</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1B', H31B)" ng-model="H31B"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1C MUAC Yellow</td>
+                                <td>3.1C MUAC Yellow</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1C', H31C)" ng-model="H31C"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1D MUAC Green</td>
+                                <td>3.1D MUAC Green</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1D', H31D)" ng-model="H31D"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1E Pneumonia cases identified</td>
+                                <td>3.1E Pneumonia cases identified</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1E', H31E)" ng-model="H31E"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1F Malaria (RDT +)</td>
+                                <td>3.1F Malaria (RDT +)</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1F', H31F)" ng-model="H31F">
                                 </td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1G Diarrhea cases identified</td>
+                                <td>3.1G Diarrhea cases identified</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1G', H31G)" ng-model="H31G"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1H Pneumonia treated (antibiotics)</td>
+                                <td>3.1H Pneumonia treated (antibiotics)</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1H', H31H)" ng-model="H31H"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1I Malaria treated (2-11 months)</td>
+                                <td>3.1I Malaria treated (2-11 months)</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1I', H31I)" ng-model="H31I"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1J Malaria treated (1-5 years)</td>
+                                <td>3.1J Malaria treated (1-5 years)</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1J', H31J)" ng-model="H31J"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1K Malaria treated in less than 24 hrs</td>
+                                <td>3.1K Malaria treated in less than 24 hrs</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1K', H31K)" ng-model="H31K"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1L Malaria treated in more than 24 hrs</td>
+                                <td>3.1L Malaria treated in more than 24 hrs</td>
                                 <td><input type="text" ng-blur="lossFocus('3.1L', H31L)" ng-model="H31L"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1M Diarrhea treated (Zinc + ORS)</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('3.1M', H31M)" ng-model="H31M">
-                                </td>
+                                <td>3.1M Diarrhea treated (Zinc + ORS)</td>
+                                <td><input type="text" ng-blur="lossFocus('3.1M', H31M)" ng-model="H31M"></td>
                             </tr>
                             <tr>
-                                <td height="30px">3.1N Referred to Health Facility</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('3.1N', H31N)" ng-model="H31N">
-                                </td>
+                                <td>3.1N Referred to Health Facility</td>
+                                <td><input type="text" ng-blur="lossFocus('3.1N', H31N)" ng-model="H31N"></td>
                             </tr>
                             </tbody>
                         </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
 
-            <table align="right" width="310">
-                <tbody>
-                <tr>
-                    <td>
-                        <table border="1" bordercolor="#000000" cellpadding="0" cellspacing="0" width="310"
-                               align="right">
-                            <colgroup>
-                                <col span="30" width="13"/>
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <td height="50" width="280"><strong>Module 4 - HIV,TB, CM-NTD, Mental Health</strong>
-                                </td>
-                                <td><strong>Total</strong></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1A HIV Client Visits</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1A', H41A)" ng-model="H41A">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1B TB Client Visits</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1B', H41B)" ng-model="H41B">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1C CM-NTD Client Visits</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1C', H41C)" ng-model="H41C">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1D Mental Health Client Visits</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1D', H41D)" ng-model="H41D">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1E LTFU HIV Clients Traced</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1E', H41E)" ng-model="H41E">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td height="30px">4.1F LTFU TB Clients Traced</td>
-                                <td colspan="5"><input type="text" ng-blur="lossFocus('4.1F', H41F)" ng-model="H41F">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="28" height="50px"><strong>Supervision</strong></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">5.3A Supervision visits completed</td>
-                                <td><input type="text" ng-blur="lossFocus('5.3A', H53A)" ng-model="H53A"/></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">5.3B Number of CHA Absences</td>
-                                <td><input type="text" ng-blur="lossFocus('5.3B', H53B)" ng-model="H53B"/></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">5.3C Reviews Completed</td>
-                                <td><input type="text" ng-blur="lossFocus('5.3C', H53C)" ng-model="H53C"/></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">5.3D Reviews with Correct Treatment</td>
-                                <td><input type="text" ng-blur="lossFocus('5.3D', H53D)" ng-model="H53D"/></td>
-                            </tr>
-                            <tr>
-                                <td height="30px">5.3E CHA Reports On Time</td>
-                                <td><input type="text" ng-blur="lossFocus('5.3E', H53E)" ng-model="H53E"/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<button ng-click="enregistrer()">Save</button>
+                <div class="col-md-12">
+                    <table class="table-report-cha">
+                        <thead>
+                        <tr>
+                            <th>Module 4 - HIV,TB, NTD, Mental Health</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>4.1A HIV Client Visits</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1A', H41A)" ng-model="H41A"></td>
+                        </tr>
+                        <tr>
+                            <td>4.1B TB Client Visits</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1B', H41B)" ng-model="H41B"></td>
+                        </tr>
+                        <tr>
+                            <td>4.1C CM-NTD Client Visits</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1C', H41C)" ng-model="H41C"></td>
+                        </tr>
+                        <tr>
+                            <td>4.1D Mental Health Client Visits</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1D', H41D)" ng-model="H41D"></td>
+                        </tr>
+                        <tr>
+                            <td>4.1E LTFU HIV Clients Traced</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1E', H41E)" ng-model="H41E"></td>
+                        </tr>
+                        <tr>
+                            <td>4.1F LTFU TB Clients Traced</td>
+                            <td><input type="text" ng-blur="lossFocus('4.1F', H41F)" ng-model="H41F"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Supervision</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>5.3A Supervision visits completed</td>
+                            <td><input type="text" ng-blur="lossFocus('5.3A', H53A)" ng-model="H53A"/></td>
+                        </tr>
+                        <tr>
+                            <td>5.3B Number of CHA Absences</td>
+                            <td><input type="text" ng-blur="lossFocus('5.3B', H53B)" ng-model="H53B"/></td>
+                        </tr>
+                        <tr>
+                            <td>5.3C Reviews Completed</td>
+                            <td><input type="text" ng-blur="lossFocus('5.3C', H53C)" ng-model="H53C"/></td>
+                        </tr>
+                        <tr>
+                            <td>5.3D Reviews with Correct Treatment</td>
+                            <td><input type="text" ng-blur="lossFocus('5.3D', H53D)" ng-model="H53D"/></td>
+                        </tr>
+                        <tr>
+                            <td>5.3E CHA Reports On Time</td>
+                            <td><input type="text" ng-blur="lossFocus('5.3E', H53E)" ng-model="H53E"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
+        <hr>
+        <div>
+            <button class="btn btn-success" ng-click="enregistrer()"><i class="fa fa-2x fa-save"></i></button>
+            <!--<button class="btn btn-warning" ng-click="enregistrer()" disabled><i class="fa fa-3x fa-edit"></i></button>-->
+        </div>
+    </div>
+</div>

@@ -174,3 +174,11 @@ form.form-horizontal .form-control {
     width: 45px;
 }
 
+.cha-report-notification {
+    background-color: lightblue;
+    width: 100%;
+}
+
+.report-flag {
+    width: 55px;
+}
