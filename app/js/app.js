@@ -3,7 +3,7 @@ var baseUrl;
 var cbis = angular.module('cbis', ['ngRoute', 'ngResource', 'ui-notification', 'angularBootstrapNavTree', 'ngAnimate'])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         $routeProvider.when('/CHA_HRF', {
-            templateUrl: 'partials/CHA_Household_Registration_Form.html',
+            templateUrl: 'partials/CHA_Household_Report_Form.html',
             controller: 'CHA_HRF'
         }).when('/CHA_MSR', {
             templateUrl: 'partials/CHA_Monthly_Service_Report.html',
@@ -27,7 +27,7 @@ var cbis = angular.module('cbis', ['ngRoute', 'ngResource', 'ui-notification', '
         });
     }]);
 
-cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource','DataElementResource','me', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource,DataElementResource,me) {
+cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window', '$filter', 'DataSetResource','DataElementResource','me','$timeout', function ($rootScope, orgUnitResource, orgUnitLevel, $location, $window, $filter, DataSetResource,DataElementResource,me,$timeout) {
 
     var orgUnitCollection = [], arrylong = 0, page = 1, pageCount = 0;
     var firstTimestamp;
@@ -41,6 +41,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
     notreAnnee = $filter('date')(notreAnnee, 'yyyy');
     notreAnnee = parseInt(notreAnnee);
     var compte = 0,compter = 0, comptePageCount = 0, DataSet =[],meOrgUnit = [],mesNiveau = {};
+    var MesOrgUnit = [], lonGroup = 0, typeAppel = "charge",lesChildren = [];
     $rootScope.datasetSelected = {};
     $rootScope.arbre = [];
     $rootScope.allOrgUnit = [];
@@ -49,7 +50,7 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
     $rootScope.niveauOrgUnit;
     $rootScope.loadingOrgUnits = true;
 
-    //getOrgUnitLevel();
+    
     userMe();
     //getDataSet();
 
@@ -58,272 +59,63 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
         me.query({
             //id : 'organisationUnits'
         }, function (data) {
-            console.log("resultat UnserMe");
+            /*console.log("resultat UnserMe");
             console.log(data);
             console.log("organisation");
-            console.log(data.organisationUnits);
-            /*for(var i = 0,j = data.organisationUnits.length;i<j; i++){
-                var temp = {};
-                temp.children = data.organisationUnits[i].children;
-                temp.dataSets = data.organisationUnits[i].children;
-                temp.id = data.organisationUnits[i].id;
-                temp.level = data.organisationUnits[i].level;
-                temp.name = data.organisationUnits[i].name;
-                temp.shortName = data.organisationUnits[i].shortName;
-
-                meOrgUnit.push(temp);
-            }*/
+            console.log(data.organisationUnits);*/
             meOrgUnit = data.organisationUnits;
+            /*console.log("meOrgUnit <<<<");
+            console.log(meOrgUnit);*/
+            for(var i = 0,j= meOrgUnit.length;i<j;i++){
+                meOrgUnit[i].positionArbre = ""+i;
+            }
             compte = 0;
             getMeOrgUnits();
         }, function () {
         });
     }
-
+    
     function getMeOrgUnits() {
         console.log("entrer dans getMeOrgUnits");
         orgUnitResource.query({
             id : meOrgUnit[compte].id,
-            fields: 'id,name,shortName,children,level,dataSets'
+            fields: 'id,name,shortName,parent,children,level,dataSets'
         }, function (data) {
-            console.log("resultat data");
-            console.log(data);
+            /*console.log("resultat data");
+            console.log(data);*/
             var temp = {};
+            temp.children = [];
             temp.children = data.children;
-            temp.dataSets = data.children;
+            temp.dataSets = data.dataSets;
             temp.id = data.id;
             temp.level = data.level;
             temp.name = data.name;
+            temp.label = data.name;
             temp.shortName = data.shortName;
-
+            temp.positionArbre = meOrgUnit[compte].positionArbre;
+            
             //meOrgUnit.push(temp);
             meOrgUnit[compte] = temp;
             compte++;
             if(compte < meOrgUnit.length){
                 getMeOrgUnits();
             }else{
-                orderMeOrgUnits();
+                if(typeAppel == "charge"){
+                    grouperParNivo(angular.copy(meOrgUnit));
+                }else{
+                    addChildren(angular.copy(meOrgUnit));
+                }
+
             }
         }, function (err) {
             
         });
     }
-    function orderMeOrgUnits() {
-        console.log("entrer dans orderMeOrgUnits");
-        meOrgUnit.sort(function (a, b) {
-            if (a.level > b.level)
-                return 1;
-            if (a.level < b.level)
-                return -1;
-            return 0;
-        });
-        
-        console.log("trie orgUnit");
-        console.log(meOrgUnit);
-        mesNiveau.Suplevel = meOrgUnit[0].level;
-        if(meOrgUnit.length > 1){
-            //mesNiveau.Suplevel = meOrgUnit[0].level;
-            constitMeOrgUnitLevel();
-        }else{
-            mesNiveau.nbre = 1;
-        }
-        getOrgUnitLevel();
-    }
-
-    function constitMeOrgUnitLevel() {
-        console.log("entrer dans constitMeOrgUnitLevel");
-        var nbre = 1;
-        for(var i=0,j=meOrgUnit.length;i<j;i++){
-            for(var a=0;i<j;i++){
-                if(meOrgUnit[i].level == meOrgUnit[a].level){
-                    nbre++;
-                }
-            }
-        }
-        mesNiveau.nbre = nbre;
-    }
-
-    function executerMesNivo() {
-        console.log("entrer dans executerMesNivo");
-            mesNiveau.liste = [];
-            for(var i =0,j=$rootScope.niveauOrgUnit.length;i<j;i++){
-                if($rootScope.niveauOrgUnit[i].level > mesNiveau.Suplevel){
-                    mesNiveau.liste.push($rootScope.niveauOrgUnit[i].level);
-                }
-            }
-        console.log("$rootScope.niveauOrgUnit");
-        console.log($rootScope.niveauOrgUnit);
-        console.log("mesNiveau");
-        console.log(mesNiveau);
-        rempliMesNiveau();
-        
-
-    }
-
-    function rempliMesNiveau() {
-        console.log("entrer dans rempliMesNiveau");
-        console.log(angular.copy(meOrgUnit));
-        $rootScope.allOrgUnit = [];
-        $rootScope.allOrgUnit = meOrgUnit;
-        if(mesNiveau.liste.length > 0){
-            compte = 0;
-            MesOrgUnitParLevel();
-        }else{
-            console.log("etablissement de dernier nivo");
-            $rootScope.arbre = $rootScope.allOrgUnit;
-            $rootScope.loadingOrgUnits = false;
-        }
-        
-    }
-
-    function MesOrgUnitParLevel() {
-        console.log("entrer dans MesOrgUnitParLevel");
-        orgUnitResource.query({
-            level: mesNiveau.liste[compte],
-            paging: false,
-            fields: 'id,name,shortName,parent,level,dataSets'
-        }, function (data) {
-            var tempo = [];
-            tempo = angular.copy($rootScope.allOrgUnit);
-            $rootScope.allOrgUnit = tempo.concat(data.organisationUnits);
-            compte++;
-            if(compte < mesNiveau.liste.length){
-                MesOrgUnitParLevel();
-            }else{
-                console.log("$rootScope.allOrgUnit");
-                console.log($rootScope.allOrgUnit);
-                dataArbre();
-            }
-        }, function (err) {
-
-        });
-    }
-
-
-    function getOrgUnitLevel() {
-        console.log("lancement de collecte des orgUnit");
-        firstTimestamp = new Date().getTime();
-        orgUnitLevel.get({
-            paging: false,
-            fields: 'id,name,level'
-        }, function (data) {
-            $rootScope.niveauOrgUnit = data.organisationUnitLevels;
-            /*ordonner par niveau*/
-            $rootScope.niveauOrgUnit.sort(function (a, b) {
-                if (a.level > b.level)
-                    return 1;
-                if (a.level < b.level)
-                    return -1;
-                return 0;
-            });
-            executerMesNivo();
-        }, function () {
-        });
-    }
-
-    function getOrgUnit() {
-        orgUnitResource.query({
-            paging: false,
-            fields: 'id,name,shortName,parent,level,dataSets'
-        }, function (data) {
-            var secondTimestamp = new Date().getTime();
-            console.log("temps d'execution = " + (secondTimestamp - firstTimestamp) + " millisecondes");
-            $rootScope.allOrgUnit = data.organisationUnits;
-            dataArbre();
-        }, function (err) {
-            getOrgUnitDetail();
-        });
-    }
-
-    function getOrgUnitDetail() {
-        //console.log("entrer dans getOrgUnitDetail()")
-        orgUnitResource.query({
-            pageSize: 300,
-            fields: 'id,name,shortName,parent,level'
-        }, function (data) {
-            $rootScope.allOrgUnit = [];
-            if (data.pager.pageCount) {
-                page = 1;
-                pageCount = data.pager.pageCount;
-                console.log("pageCount = " + pageCount);
-                $rootScope.allOrgUnit = data.organisationUnits;
-                $rootScope.nbreTelecharger = 1;
-                $rootScope.nbreTotal = pageCount;
-                if (pageCount > page) {
-                    page++;
-                    getOrgUnitID();
-                }
-            }
-        }, function (err) {
-
-        });
-    }
-
-    function getOrgUnitID() {
-        console.log("entrer dans getOrgUnitID()");
-        orgUnitResource.query({
-            page: page,
-            pageSize: 300,
-            fields: 'id,name,shortName,parent,level'
-        }, function (data) {
-            var tempo = [];
-            tempo = angular.copy($rootScope.allOrgUnit);
-            $rootScope.allOrgUnit = tempo.concat(data.organisationUnits);
-            if (pageCount > page) {
-                page++;
-                $rootScope.nbreTelecharger++;
-                getOrgUnitID();
-            } else {
-                var secondTimestamp = new Date().getTime();
-                console.log("temps d'execution long= " + (secondTimestamp - firstTimestamp) + " millisecondes");
-                console.log("fin de collect orgUnits dans getOrgUnitID()");
-                //console.log($rootScope.allOrgUnit);
-                dataArbre();
-            }
-        }, function (err) {
-            //compte++;
-            //if(compte<$rootScope.allOrgUnit.length){getOrgUnitID();}else{compte=0;dataArbre();}
-        });
-    }
-
-
-    /*Preparation à la construction de l'arborescence. constitution d'un tableau les unité d'organisation  par nivo*/
-    function dataArbre() {
-        var nivoReel = [];
-        /*ordonner par niveau*/
-        /*$rootScope.niveauOrgUnit.sort(function (a, b) {
-            if (a.level > b.level)
-                return 1;
-            if (a.level < b.level)
-                return -1;
-            return 0;
-        });*/
-
-        /* constitution des niveaux*/
-        console.log("entrer dans constitution des niveaux");
-        for (var i = 0, j = $rootScope.niveauOrgUnit.length; i < j; i++) {
-            var tmp = {
-                level: $rootScope.niveauOrgUnit[i].level,
-                orgUnits: []
-            };
-            orgUnitCollection[i] = tmp;
-        }
-
-        /*remplissage par nivo*/
-        console.log("entrer dans remplissage par nivo");
-        for (var i = 0, j = $rootScope.allOrgUnit.length; i < j; i++) {
-            var tp = $rootScope.allOrgUnit[i].level;
-            if (nivoReel.indexOf(tp) == -1) {
-                nivoReel.push(tp);
-            }
-            tp--;
-            $rootScope.allOrgUnit[i].nomNiveau = $rootScope.niveauOrgUnit[tp].name;
-            orgUnitCollection[tp].orgUnits.push($rootScope.allOrgUnit[i]);
-        }
-        /*trie des unités par ordre alphabetique*/
-        console.log("entrer trie des unités par ordre alphabetique");
-        for (var i = 0, j = orgUnitCollection.length; i < j; i++) {
-            orgUnitCollection[i].orgUnits.sort(function (a, b) {
+    
+    function ordreAlphabetique(meOrg) {
+        console.log("entrer dans ordreAlphabetique");
+        for (var i = 0, j = meOrg.length; i < j; i++) {
+            meOrg.sort(function (a, b) {
                 if (a.name > b.name) {
                     return 1;
                 }
@@ -333,91 +125,96 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
                 return 0;
             });
         }
-        $rootScope.OrgUnitGroup = angular.copy(orgUnitCollection);
-        var testont = orgUnitCollection.length;
-        arrylong = angular.copy(testont);
-        arrylong -= 1;
-        /*console.log("nivoReel =");
-         console.log(nivoReel);
-         console.log("orgUnitCollection =");
-         console.log(orgUnitCollection);*/
-        if (nivoReel.length == orgUnitCollection.length) {
-            arbreRecursive(orgUnitCollection.length - 1);
-        } else {
-            arrylong = angular.copy(nivoReel.length);
-            arrylong -= 1;
-            arbreRecursive(nivoReel.length - 1);
+        return meOrg;
+        
+    }
+    
+    function grouperParNivo(meOrg) {
+        console.log("entrer dans grouperParNivo");
+        //console.log("meOrg");
+        //console.log(meOrg);
+        meOrg = ordreAlphabetique(meOrg);
+        meOrgUnit = [];
+        for(var i = 0,j=meOrg.length;i<j;i++){
+            if(meOrg[i].children && meOrg[i].children.length > 0){
+                for(var k=0,l=meOrg[i].children.length;k<l;k++){
+                    meOrg[i].children[k].positionArbre = ""+meOrg[i].positionArbre+""+k;
+                    meOrgUnit.push(meOrg[i].children[k]);
+                }
+                meOrg[i].children = [];
+            }
         }
+        var temp = {};
+        temp.level = meOrg[0].level;
+        temp.orgUnits = meOrg;
+        MesOrgUnit[lonGroup] = temp;
 
-
+        if (meOrgUnit.length > 0) {
+            lonGroup++;
+            if (lonGroup < 3) {
+                compte = 0;
+                getMeOrgUnits();
+            }else{
+                var tmp2 = {};
+                tmp2.orgUnits = meOrgUnit;
+                MesOrgUnit[lonGroup] = tmp2;
+                bienVoirArbre();
+            }
+        } else {
+            //console.log("MesOrgUnit par sortir");
+            bienVoirArbre();
+        }
+        
+    }
+    
+    function bienVoirArbre() {
+        console.log("enstrer dans bienVoirArbre");
+        /*console.log("MesOrgUnit");
+        console.log(MesOrgUnit);*/
+        var niv = MesOrgUnit.length;
+        if(niv > 1){
+            construireArbreRecursive(niv-1);
+        }else{
+            affichageOrgUnit();
+        }
+        
     }
 
-    /*contitution de l'hierachie des unités d'organisations*/
-    function arbreRecursive(nivo) {
-        console.log("entrer dans arbreRecursive");
-         console.log("nivo = " + nivo);
-        var temptout = [];
-        var nivoSup = nivo - 1;
-        for (var i = 0, j = orgUnitCollection[nivoSup].orgUnits.length; i < j; i++) {
-            var tempS = {};
-            tempS.data = {};
-            tempS.children = [];
-            tempS.label = orgUnitCollection[nivoSup].orgUnits[i].name;
-            tempS.id = orgUnitCollection[nivoSup].orgUnits[i].id;
-            tempS.data = orgUnitCollection[nivoSup].orgUnits[i];
-            var aDelete = [];
-            var continu = true;
-            var a = 0;
-            while (continu) {
-                if (arrylong == nivo) {
-                    //console.log("nivo = "+nivo+"; a = "+a);
-                    //console.log(orgUnitCollection);
-                    if (orgUnitCollection[nivoSup].orgUnits[i].id == orgUnitCollection[nivo].orgUnits[a].parent.id) {
-                        var temp = {};
-                        temp.data = {};
-                        temp.children = [];
-                        temp.label = orgUnitCollection[nivo].orgUnits[a].name;
-                        temp.id = orgUnitCollection[nivo].orgUnits[a].id;
-                        temp.data = orgUnitCollection[nivo].orgUnits[a];
-                        tempS.children.push(temp);
-                        orgUnitCollection[nivo].orgUnits.splice(a, 1);
-                        a--;
-                    }
-                } else {
-                    if (orgUnitCollection[nivo].orgUnits.length == 0) {
-                        break;
-                    }
-                    // console.log("***** nivo = "+nivo+"; a = "+a);
-                    // console.log(orgUnitCollection);
-                    if (orgUnitCollection[nivoSup].orgUnits[i].id == orgUnitCollection[nivo].orgUnits[a].data.parent.id) {
-                        var temp = {};
-                        temp.data = {};
-                        temp.children = [];
-                        temp.label = orgUnitCollection[nivo].orgUnits[a].label;
-                        temp.id = orgUnitCollection[nivo].orgUnits[a].id;
-                        temp.data = orgUnitCollection[nivo].orgUnits[a].data;
-                        temp.children = orgUnitCollection[nivo].orgUnits[a].children;
-                        tempS.children.push(temp);
-                        orgUnitCollection[nivo].orgUnits.splice(a, 1);
-                        a--;
-                    }
-
-                }
-                a++;
-                if (a == orgUnitCollection[nivo].orgUnits.length) {
-                    continu = false;
+    function construireArbreRecursive(nivo) {
+        console.log("entrer dans construireArbreRecursive");
+        var long = MesOrgUnit[nivo].orgUnits.length;
+        var nivoSup = nivo-1;
+        //console.log("debut long = "+long);
+        while(long != 0){
+            var indice = MesOrgUnit[nivo].orgUnits[0].positionArbre.substr(0, nivo);
+            //console.log("indice = "+indice+"; nivo = "+nivo);
+            for(var i=0,j=MesOrgUnit[nivoSup].orgUnits.length;i<j;i++){
+                if(indice == MesOrgUnit[nivoSup].orgUnits[i].positionArbre){
+                    MesOrgUnit[nivoSup].orgUnits[i].children.push(MesOrgUnit[nivo].orgUnits[0]);
+                    break;
                 }
             }
-            temptout.push(tempS);
+            MesOrgUnit[nivo].orgUnits.splice(0,1);
+            long--;
+            //console.log("fin long = "+long);
         }
-        orgUnitCollection[nivoSup].orgUnits = temptout;
-        if (nivo != 1) {
-            arbreRecursive(nivoSup);
-        } else {
-            $rootScope.arbre = orgUnitCollection[0].orgUnits;
-            $rootScope.loadingOrgUnits = false;
-            console.log("fin de constitution de l'arbre");
+        if(nivo != 1){
+            construireArbreRecursive(nivo-1);
+        }else{
+            affichageOrgUnit();
         }
+        
+    }
+    
+    function affichageOrgUnit() {
+        console.log("entrer dans affichageOrgUnit");
+        /*console.log("MesOrgUnit");
+        console.log(MesOrgUnit);*/
+        $rootScope.arbre = MesOrgUnit[0].orgUnits;
+        /*console.log("$rootScope.arbre");
+        console.log($rootScope.arbre);*/
+        $rootScope.loadingOrgUnits = false;
+        getDataSet();
     }
 
     $rootScope.goAccueil = function () {
@@ -427,21 +224,99 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
     $rootScope.my_tree_handler = function (branche) {
         console.log("entrer dans my_tree_handler");
         console.log(branche);
-        //console.log(branche.data);
-        if ($rootScope.orgUnitSelectedId != branche.data.id) {
+
+            if(branche.children.length > 0){
+                if(branche.children[0].label){
+                    console.log("le label existe");
+                }else{
+                    console.log("label inexistant++++++");
+                    lesChildren = branche.children;
+                    meOrgUnit = angular.copy(lesChildren);
+                    compte = 0;
+                    typeAppel = "children";
+                    getMeOrgUnits();
+                }
+                
+           }else{
+               console.log("pas de children")
+            }
+
+        if ($rootScope.orgUnitSelectedId != branche.id) {
             $location.path('acceuil');
             $rootScope.dataSetID = {};
             $rootScope.periode = "";
-            $rootScope.orgUnitSelected = branche.data.name;
-            $rootScope.orgUnitSelectedId = branche.data.id;
+            $rootScope.orgUnitSelected = branche.name;
+            $rootScope.orgUnitSelectedId = branche.id;
             console.log("orgUnitSelectedId = " + $rootScope.orgUnitSelectedId);
 
-            if (branche.data.dataSets) {
-                displayDataSetName(branche.data.dataSets)
+            if (branche.dataSets) {
+                displayDataSetName(branche.dataSets);
             }
         }
 
+    }
 
+    function addChildren(meOrg) {
+        console.log("entrer dans addChildren");
+        //console.log(angular.copy(meOrg));
+        meOrg = ordreAlphabetique(meOrg);
+
+        for(var i = 0,j=meOrg.length;i<j;i++){
+            if(meOrg[i].children && meOrg[i].children.length > 0){
+                for(var k=0,l=meOrg[i].children.length;k<l;k++){
+                    meOrg[i].children[k].positionArbre = ""+meOrg[i].positionArbre+""+k;
+                    meOrgUnit.push(meOrg[i].children[k]);
+                }
+                //meOrg[i].children = [];
+            }
+        }
+        lesChildren = angular.copy(meOrg);
+       /* console.log("lesChildren =====");
+        console.log(lesChildren);
+        console.log("$rootScope.arbre");
+        console.log($rootScope.arbre);*/
+        var posi = lesChildren[0].positionArbre;
+        /*console.log("posi ====== "+angular.copy(posi)+" // posi.length = "+posi.length);
+        console.log("//////////////////////////////////////////////////////");*/
+        posi = posi.substr(0,posi.length-1);
+        var posiArbre = $rootScope.arbre[0].positionArbre.length;
+        var posiActu = posi.substr(0,posiArbre);
+        //console.log("$rootScope.arbre[0].positionArbre = "+$rootScope.arbre[0].positionArbre+" # posiArbre = "+posiArbre+" # posi = "+posi+" # posiActu = "+posiActu);
+        for(var ab =0,bb=$rootScope.arbre.length;ab<bb;ab++){
+            if($rootScope.arbre[ab].positionArbre == posiActu){
+                if($rootScope.arbre[ab].positionArbre == posi){
+                    $rootScope.arbre[ab].children = lesChildren;
+                }else{
+                    //$rootScope.arbre[ab].children = ajouterArbre($rootScope.arbre[ab].children,posi);
+                    ajouterArbre($rootScope.arbre[ab].children,posi);
+                }
+            }
+        }
+        /*console.log("$rootScope.arbre");
+        console.log($rootScope.arbre);*/
+    }
+    
+    function ajouterArbre(arbre,posi) {
+        console.log("entrer dans ajouterArbre");
+        var posiArbre = arbre[0].positionArbre.length;
+        var posiActu = posi.substr(0,posiArbre);
+        //console.log("arbre[0].positionArbre = "+arbre[0].positionArbre+" # posiArbre = "+posiArbre+" # posi = "+posi+" # posiActu = "+posiActu);
+        for(var ab =0,bb=arbre.length;ab<bb;ab++){
+            if(arbre[ab].positionArbre == posiActu){
+                if(arbre[ab].positionArbre == posi){
+                   // console.log("!!!!!!!!!!! trouvééééééééé !!!!!!!!!!!!");
+                    arbre[ab].children = lesChildren;
+                    /*return arbre[ab].children;
+                    console.log("arbre[ab]");
+                    console.log(arbre[ab]);
+                    console.log("lesChildren");
+                    console.log(lesChildren);*/
+                }else{
+                    //arbre[ab].children = ajouterArbre(arbre[ab].children,posi);
+                    ajouterArbre(arbre[ab].children,posi);
+                }
+            }
+        }
     }
 
     function PeriodeType(typePeriode) {
@@ -685,6 +560,10 @@ cbis.run(['$rootScope', 'orgUnitResource', 'orgUnitLevel', '$location', '$window
 
         }
 
+    }
+
+    function finChargementArbre() {
+        getDataSet();
     }
 
 }]);
